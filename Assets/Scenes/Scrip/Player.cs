@@ -1,49 +1,43 @@
 using UnityEngine;
-// OBRIGATÓRIO: Adiciona a biblioteca do novo sistema de input
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public float velocidade = 5.0f;
-    private Rigidbody2D rb;
-    private Vector2 direcao;
-
+    public int life = 40;
+    public float speed = 5f;
+    private Animator animator;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-
-        // Zera a gravidade (gravityScale = 0f) como você lembrou!
-        rb.gravityScale = 0f;
-        
-        // Evita que o personagem rode ao colidir
-        rb.freezeRotation = true;
+        Debug.Log("Inicio da Cena");
+        animator = GetComponent<Animator>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        // Reseta a direção a cada frame
-        direcao = Vector2.zero;
-
-        // Pega o teclado atual conectado
-        Keyboard teclado = Keyboard.current;
-
-        // Se o teclado existir, faz a checagem equivalente ao GetKey antigo
-        if (teclado != null)
-        {
-            // .isPressed funciona exatamente como o GetKey mantido pressionado
-            if (teclado.wKey.isPressed) direcao.y += 1;
-            if (teclado.sKey.isPressed) direcao.y -= 1;
-            if (teclado.aKey.isPressed) direcao.x -= 1;
-            if (teclado.dKey.isPressed) direcao.x += 1;
-        }
-
-        // Normaliza para não correr mais rápido na diagonal
-        direcao = direcao.normalized;
+        Vector2 direction = Vector2.zero;
+        direction = Mover(direction);
+        Debug.Log($"Inicio da Cena {direction}");
+         transform.position +=(Vector3)direction * (speed * Time.deltaTime);
+        if(direction != Vector2.zero)
+            animator.SetInteger("Transition", 1);
+        else
+            animator.SetInteger("Transition", 0);
+    
     }
 
-    void FixedUpdate()
+    Vector3 Mover(Vector2 direction)
     {
-        // Aplica o movimento de forma sincronizada com o motor físico
-        rb.linearVelocity = direcao * velocidade;
+        direction = Vector2.zero;
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) 
+            direction.y = 1f;
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) 
+            direction.y = -1f;
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) 
+            direction.x = -1f;
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) 
+            direction.x = 1f;
+        return (Vector3)direction.normalized;
     }
 }
