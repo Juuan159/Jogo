@@ -5,39 +5,39 @@ public class Player : MonoBehaviour
 {
     public int life = 40;
     public float speed = 5f;
-    private Animator animator;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
+    private Vector2 diretion;
+    public Vector2 _diretion
+    {
+        get { return this.diretion; }
+        set { this.diretion = value; }
+    }
+    
     void Start()
     {
         Debug.Log("Inicio da Cena");
-        animator = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector2 direction = Vector2.zero;
-        direction = Mover(direction);
-        Debug.Log($"Inicio da Cena {direction}");
-         transform.position +=(Vector3)direction * (speed * Time.deltaTime);
-        if(direction != Vector2.zero)
-            animator.SetInteger("Transition", 1);
-        else
-            animator.SetInteger("Transition", 0);
-    
+        _diretion = Mover(); 
+        Debug.Log($"Inicio da Cena {_diretion}");
+        transform.position += (Vector3)_diretion * (speed * Time.deltaTime);     
     }
 
-    Vector3 Mover(Vector2 direction)
+    Vector2 Mover()
     {
-        direction = Vector2.zero;
+        Vector2 currentDirection = Vector2.zero;
+        
         if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) 
-            direction.y = 1f;
+            currentDirection.y = 1f;
         if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) 
-            direction.y = -1f;
+            currentDirection.y = -1f;
         if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) 
-            direction.x = -1f;
+            currentDirection.x = -1f;
         if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) 
-            direction.x = 1f;
-        return (Vector3)direction.normalized;
+            currentDirection.x = 1f;
+            
+        return currentDirection.normalized;
     }
 }
