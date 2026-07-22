@@ -5,39 +5,53 @@ public class Player : MonoBehaviour
 {
     public int life = 40;
     public float speed = 5f;
+    private Vector2 direction;
+    private Rigidbody2D rig; 
     
-    private Vector2 diretion;
-    public Vector2 _diretion
+
+    public Vector2 _direction
     {
-        get { return this.diretion; }
-        set { this.diretion = value; }
+        get { return this.direction;} 
+        set { this.direction = value;} 
     }
-    
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Debug.Log("Inicio da Cena");
+        rig = GetComponent<Rigidbody2D>();
+       
+       
     }
 
+    // Update is called once per frame
     void Update()
     {
-        _diretion = Mover(); 
-        Debug.Log($"Inicio da Cena {_diretion}");
-        transform.position += (Vector3)_diretion * (speed * Time.deltaTime);     
+           
+    }
+    
+    public void OnMove(InputValue value)
+    {
+        // Lê a direção (X, Y) já normalizada
+        direction = value.Get<Vector2>();
+    }
+    
+    Vector3 Mover(Vector2 direction)
+    {
+        this.direction = Vector2.zero;
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) 
+            this.direction.y = 1f;
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) 
+            this.direction.y = -1f;
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) 
+            this.direction.x = -1f;
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) 
+            this.direction.x = 1f;
+        return (Vector3)this.direction.normalized;
     }
 
-    Vector2 Mover()
+    private void FixedUpdate()
     {
-        Vector2 currentDirection = Vector2.zero;
-        
-        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) 
-            currentDirection.y = 1f;
-        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) 
-            currentDirection.y = -1f;
-        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) 
-            currentDirection.x = -1f;
-        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) 
-            currentDirection.x = 1f;
-            
-        return currentDirection.normalized;
+        rig.linearVelocity =Mover(direction) * (speed);           
     }
 }

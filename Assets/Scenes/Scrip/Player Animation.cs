@@ -1,38 +1,32 @@
 using UnityEngine;
 
-public class PlayerAnimation : MonoBehaviour
+public class PlayerAnime : MonoBehaviour
 {
     private Player player;
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
-
+    
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponent<Player>();
         this.animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    // Update is called once per frame
     void Update()
     {
-        if (player == null) return;
-
-        if (player._diretion.sqrMagnitude > 0)
-        {
+         
+        if (player._direction.sqrMagnitude > 0){             
             this.animator.SetInteger("Transition", 1);
-        }
-        else
-        {
+        }else{
             this.animator.SetInteger("Transition", 0);
         }
         
-        if (player._diretion.x > 0) 
-        {
-            spriteRenderer.flipX = false;
+        if (player._direction.x > 0){             
+          transform.eulerAngles = new Vector2(0,0);
+        }else if (player._direction.x < 0){
+            transform.eulerAngles = new Vector2(0, 180);
         }
-        else if (player._diretion.x < 0) 
-        {
-            spriteRenderer.flipX = true;
-        }
+
     }
 }
