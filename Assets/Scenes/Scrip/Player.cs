@@ -15,7 +15,6 @@ public class Player : MonoBehaviour
         set { this.direction = value;} 
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Debug.Log("Inicio da Cena");
@@ -24,7 +23,6 @@ public class Player : MonoBehaviour
        
     }
 
-    // Update is called once per frame
     void Update()
     {
            
@@ -32,7 +30,6 @@ public class Player : MonoBehaviour
     
     public void OnMove(InputValue value)
     {
-        // Lê a direção (X, Y) já normalizada
         direction = value.Get<Vector2>();
     }
     
