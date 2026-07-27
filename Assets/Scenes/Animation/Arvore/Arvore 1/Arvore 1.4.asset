@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
+  m_Name: Arvore 1.4
+  m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.Tilemaps.AnimatedTile
+  m_AnimatedSprites:
+  - {fileID: 2022201162, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: 9299364, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: 1121272940, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: -1154791149, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: 355979521, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: 472302536, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: -955209235, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  - {fileID: 1121325294, guid: 2d069810cab2fea4d8a099f151500ed0, type: 3}
+  m_MinSpeed: 5
+  m_MaxSpeed: 5
+  m_AnimationStartTime: 0
+  m_AnimationStartFrame: 0
+  m_TileColliderType: 1
+  m_TileAnimationFlags: 0
