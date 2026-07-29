@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public int life = 40;
+    [SerializeField] private int health = 100;
     public float speed = 5f;
     private Vector2 direction;
     private Rigidbody2D rig; 
@@ -50,5 +50,11 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         rig.linearVelocity =Mover(direction) * (speed);           
+    }
+
+    public int _health
+    {
+        get {return this.health;}
+        set {this.health = value;}
     }
 }
