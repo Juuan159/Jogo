@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class InimigoMov : MonoBehaviour
 {
-    
+    [SerializeField] private float Attackrange = 2f; 
     [SerializeField] private Rigidbody2D rb; 
     [SerializeField] private Player player;
     [SerializeField] private float speed;
@@ -20,30 +20,34 @@ public class InimigoMov : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animacao = GetComponent<Animator>();
-        
         speed = 3.0f;
         face = 1;
         precisaVirar = false;
     }
     void Start()
     {
-        
-        ChanceState(EnemyState.isIdle);
+        ChangeState(EnemyState.isIdle);
     }
   
     void FixedUpdate()
-    {   
+    {
+        if (isVisible == true)
+        {
+            Chase();
+        }
+    }
 
-        if(isVisible==true){
+    void Chase()
+    {
             precisaVirar = Mathf.Sign(player.transform.position.x - transform.position.x) != face;
             if(precisaVirar)
             {
                 Flip();
             }
             Vector2 direction = (player.transform.position - transform.position).normalized;
-            rb.linearVelocity = direction*speed;
-        }
+            rb.linearVelocity = direction*speed;  
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         
@@ -52,7 +56,7 @@ public class InimigoMov : MonoBehaviour
             if(player==null)
                 player = other.GetComponent<Player>();
             isVisible = true;
-            ChanceState(EnemyState.isMoving);
+            ChangeState(EnemyState.isMoving);
         } 
              
     }
@@ -62,7 +66,7 @@ public class InimigoMov : MonoBehaviour
         {
              isVisible = false;
              rb.linearVelocity = Vector2.zero;
-             ChanceState(EnemyState.isIdle);
+             ChangeState(EnemyState.isIdle);
         }
             
     }
@@ -72,7 +76,7 @@ public class InimigoMov : MonoBehaviour
         transform.localScale =  new Vector3(transform.localScale.x * -1,transform.localScale.y,transform.localScale.z);
     }
 
-    void ChanceState(EnemyState newState)
+    void ChangeState(EnemyState newState)
     {
         if (stateEnemy == newState) return;
         
@@ -97,5 +101,4 @@ public enum EnemyState{
     isIdle,
     isMoving,
     Attack,
-
 }
