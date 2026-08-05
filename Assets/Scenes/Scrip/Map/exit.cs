@@ -29,10 +29,6 @@ public class exit : MonoBehaviour
                     bord.enabled = false;
                 }
             }
-
-
-
-            
         }
     }
 }

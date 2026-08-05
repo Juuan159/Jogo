@@ -1,104 +1,133 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(Animator))]
 public class InimigoMov : MonoBehaviour
 {
-    [SerializeField] private float Attackrange = 2f; 
-    [SerializeField] private Rigidbody2D rb; 
-    [SerializeField] private Player player;
-    [SerializeField] private float speed;
-    [SerializeField] private EnemyState stateEnemy;
-    [SerializeField] private int face;
-    [SerializeField] private bool precisaVirar;
-    [SerializeField] private bool isVisible =false;
-    
-    private Animator animacao;
-    private static readonly int PlayerHash = Animator.StringToHash("Player");
+    public enum EnemyState { Idle, Chasing, Attacking }
+    [Header("Estados")]
+    public EnemyState currentState;
 
-    void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        animacao = GetComponent<Animator>();
-        speed = 3.0f;
-        face = 1;
-        precisaVirar = false;
-    }
+    [Header("Configurações de Movimento")]
+    public float speed;
+    public float attackRange = 1.2f; 
+
+    [Header("Configurações de Cooldown")]
+    public float attackCooldown = 2f; 
+    private float attackCooldownTimer;
+
+    [Header("Detecção do Jogador")]
+    public float playerDetectDistance = 5f;
+    public Transform detectionPoint;
+    public LayerMask playerLayer;
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Transform player; 
+
     void Start()
     {
-        ChangeState(EnemyState.isIdle);
+        rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        currentState = EnemyState.Idle;
+
+        int ladoAleatorio = Random.Range(0, 2);
+
+        if (ladoAleatorio == 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
-  
-    void FixedUpdate()
+
+    void Update()
     {
-        if (isVisible == true)
+        CheckForPlayer();
+
+        if (attackCooldownTimer > 0)
+        {
+            attackCooldownTimer -= Time.deltaTime;
+        }
+
+        if (currentState == EnemyState.Chasing)
         {
             Chase();
+        }
+        else if (currentState == EnemyState.Attacking || currentState == EnemyState.Idle)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+    }
+
+    void CheckForPlayer()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(detectionPoint.position, playerDetectDistance, playerLayer);
+
+        if (hits.Length > 0)
+        {
+            player = hits[0].transform; // Pega o transform do primeiro objeto detectado no array
+
+            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+
+            if (distanceToPlayer <= attackRange && attackCooldownTimer <= 0)
+            {
+                attackCooldownTimer = attackCooldown; 
+                ChangeState(EnemyState.Attacking);
+            }
+            else if (distanceToPlayer > attackRange && currentState != EnemyState.Attacking)
+            {
+                ChangeState(EnemyState.Chasing);
+            }
+        }
+        else
+        {
+            rb.linearVelocity = Vector2.zero;
+            ChangeState(EnemyState.Idle);
         }
     }
 
     void Chase()
     {
-            precisaVirar = Mathf.Sign(player.transform.position.x - transform.position.x) != face;
-            if(precisaVirar)
-            {
-                Flip();
-            }
-            Vector2 direction = (player.transform.position - transform.position).normalized;
-            rb.linearVelocity = direction*speed;  
+        if (player == null) return;
+
+        Vector2 direction = (player.position - transform.position).normalized;
+        rb.linearVelocity = direction * speed;
+
+        if (direction.x > 0)
+            transform.localScale = new Vector3(1, 1, 1);
+        else if (direction.x < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void ChangeState(EnemyState newState)
     {
-        
-        if(other.CompareTag("Player"))
-        {   
-            if(player==null)
-                player = other.GetComponent<Player>();
-            isVisible = true;
-            ChangeState(EnemyState.isMoving);
-        } 
-             
-    }
-    void OnTriggerExit2D(Collider2D other)
-    {
-        if(other.CompareTag("Player"))
+        currentState = newState;
+
+        if (currentState == EnemyState.Chasing)
         {
-             isVisible = false;
-             rb.linearVelocity = Vector2.zero;
-             ChangeState(EnemyState.isIdle);
+            animator.SetBool("isChasing", true);
         }
-            
-    }
-    void Flip()
-    {
-        face*=-1;
-        transform.localScale =  new Vector3(transform.localScale.x * -1,transform.localScale.y,transform.localScale.z);
-    }
-
-    void ChangeState(EnemyState newState)
-    {
-        if (stateEnemy == newState) return;
-        
-        if (newState == EnemyState.isIdle){
-          animacao.SetBool("isMoving",false);
-          animacao.SetBool("isIdle",true);
-          
-          stateEnemy = newState;
-        }
-        else
+        else if (currentState == EnemyState.Idle)
         {
-             animacao.SetBool("isIdle",false);
-             animacao.SetBool("isMoving",true);
-             stateEnemy = newState;
+            animator.SetBool("isChasing", false);
+        }
+        else if (currentState == EnemyState.Attacking)
+        {
+            animator.SetBool("isChasing", false);
+            animator.SetTrigger("attack"); 
         }
     }
 
-}
+    public void AttackAnimationEnded()
+    {
+        ChangeState(EnemyState.Idle);
+    }
 
-
-public enum EnemyState{
-    isIdle,
-    isMoving,
-    Attack,
+    private void OnDrawGizmosSelected()
+    {
+        if (detectionPoint == null) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(detectionPoint.position, playerDetectDistance);
+    }
 }
