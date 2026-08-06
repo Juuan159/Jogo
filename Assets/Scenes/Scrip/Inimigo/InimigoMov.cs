@@ -66,7 +66,7 @@ public class InimigoMov : MonoBehaviour
 
         if (hits.Length > 0)
         {
-            player = hits[0].transform; // Pega o transform do primeiro objeto detectado no array
+            player = hits[0].transform; 
 
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
