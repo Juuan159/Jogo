@@ -19,8 +19,6 @@ public class Player : MonoBehaviour
     {
         Debug.Log("Inicio da Cena");
         rig = GetComponent<Rigidbody2D>();
-       
-       
     }
 
     void Update()
