@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private Vector2 direction;
     private Rigidbody2D rig; 
     private bool isKnockedBack;
+    public PlayerAtt player_Combat;
     
 
     public Vector2 _direction
@@ -25,7 +26,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-           
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            player_Combat.Attack();
+        }
     }
     
     public void OnMove(InputValue value)

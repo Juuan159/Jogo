@@ -3,6 +3,7 @@ using UnityEngine;
 public class Inimigo : MonoBehaviour
 {
     [Header("Configurações do Ataque")]
+    public int currentHealth;
     public int damage = 10; 
     public float weaponRange = 1f;
     public float knockbackForce;
@@ -24,5 +25,10 @@ public class Inimigo : MonoBehaviour
                 playerKnock.Knockback(transform, knockbackForce, stunTime);
             }
         }
+    }
+    public int _health
+    {
+        get {return this.currentHealth;}
+        set {this.currentHealth = value;}
     }
 }
