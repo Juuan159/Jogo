@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InimigoMov : MonoBehaviour
 {
-    public enum EnemyState { Idle, Chasing, Attacking }
+    public enum EnemyState { Idle, Chasing, Attacking, Knockback }
     [Header("Estados")]
     public EnemyState currentState;
 
@@ -43,6 +43,8 @@ public class InimigoMov : MonoBehaviour
 
     void Update()
     {
+        if(currentState != EnemyState.Knockback)
+        {
         CheckForPlayer();
 
         if (attackCooldownTimer > 0)
@@ -57,6 +59,7 @@ public class InimigoMov : MonoBehaviour
         else if (currentState == EnemyState.Attacking || currentState == EnemyState.Idle)
         {
             rb.linearVelocity = Vector2.zero;
+        }
         }
     }
 

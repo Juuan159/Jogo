@@ -10,6 +10,10 @@ public class PlayerAtt : MonoBehaviour
     public int damage = 10;
     public float cooldown = 2;
     public float timer;
+    public float knockbackForce = 50;
+    public float stuntime = .3f;
+    public float knockbacktime = .15f;
+
     public void Update()
     {
         if(timer > 0)
@@ -32,6 +36,7 @@ public class PlayerAtt : MonoBehaviour
         if(inimigos.Length > 0)
         {
             inimigos[0].GetComponent<InimigoHP>().ChanngeHealth(-damage);
+            inimigos[0].GetComponent<InimigoKN>().Knockback(transform,knockbackForce, knockbacktime,stuntime);
         }
     }
         
