@@ -5,9 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Player))]
 public class PlayerHP : MonoBehaviour
 {
-    private Player player;
+
     [SerializeField] TMP_Text healthText;
-    [SerializeField] int maxtHelt;
     [SerializeField] Animator healthTextAnimator;
 
     [SerializeField] private SpriteRenderer playerSprite;
@@ -18,36 +17,35 @@ public class PlayerHP : MonoBehaviour
 
     void Start()
     {
-        player = GetComponent<Player>();
-        maxtHelt = player._health;
-        healthText.text = "HP: " + player._health + " / " + maxtHelt;
+        StatusManeger.Instance.maxtHelt = StatusManeger.Instance.currentHealth;
+        healthText.text = "HP: " + StatusManeger.Instance.currentHealth + " / " + StatusManeger.Instance.maxtHelt;
         corOriginal = playerSprite.color;
     }
     
     public void ChanngeHealth(int amount)
     {
-        player._health += amount;
+        StatusManeger.Instance.currentHealth += amount;
         
-        if (player._health >= 0)
+        if (StatusManeger.Instance.currentHealth >= 0)
         {
-            healthText.text = "HP: " + player._health + " / " + maxtHelt;
+            healthText.text = "HP: " + StatusManeger.Instance.currentHealth + " / " + StatusManeger.Instance.maxtHelt;
         }
         else
         {
-            healthText.text = "HP: 0 / " + maxtHelt;
+            healthText.text = "HP: 0 / " + StatusManeger.Instance.maxtHelt;
         }
         
         healthTextAnimator.Play("HP_Text Animation");
 
-        if (amount < 0 && player._health > 0)
+        if (amount < 0 && StatusManeger.Instance.currentHealth > 0)
         {
             if (danoCoroutine != null) StopCoroutine(danoCoroutine);
             danoCoroutine = StartCoroutine(EfeitoVermelho(0.3f));
         }
 
-        if (player._health <= 0)
+        if (StatusManeger.Instance.currentHealth <= 0)
         {
-            player.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 

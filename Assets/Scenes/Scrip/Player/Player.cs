@@ -4,13 +4,12 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int health = 100;
-    public float speed = 5f;
-    private Vector2 direction;
-    private Rigidbody2D rig; 
-    private bool isKnockedBack;
     public PlayerAtt player_Combat;
-    
+
+    private Vector2 direction;
+    private Rigidbody2D rig;
+
+    private bool isKnockedBack;
 
     public Vector2 _direction
     {
@@ -54,7 +53,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         if(isKnockedBack == false)
-        rig.linearVelocity =Mover(direction) * (speed);           
+        rig.linearVelocity = Mover(direction) * StatusManeger.Instance.speed;           
     }
 
     public void Knockback(Transform Inimigo, float force, float stunTime)
@@ -62,7 +61,7 @@ public class Player : MonoBehaviour
         isKnockedBack = true;
         Vector2 direction = (transform.position - Inimigo.position).normalized;
         rig.linearVelocity = direction * force;
-        if(_health > 0)
+        if(StatusManeger.Instance.currentHealth > 0)
         StartCoroutine(KnockbackCounter(stunTime));
     }
 
@@ -73,9 +72,11 @@ public class Player : MonoBehaviour
         isKnockedBack = false;
     }
 
+/*
     public int _health
     {
         get {return this.health;}
         set {this.health = value;}
     }
+*/
 }
