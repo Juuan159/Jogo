@@ -3,7 +3,10 @@ using UnityEngine;
 
 public class PlayerAtt : MonoBehaviour
 {
+    
     public Transform attackPoint;
+    private Transform Player;
+    
     public LayerMask inimigoLayer;
 
     public Animator anim;

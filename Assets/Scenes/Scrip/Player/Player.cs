@@ -72,11 +72,4 @@ public class Player : MonoBehaviour
         isKnockedBack = false;
     }
 
-/*
-    public int _health
-    {
-        get {return this.health;}
-        set {this.health = value;}
-    }
-*/
 }
