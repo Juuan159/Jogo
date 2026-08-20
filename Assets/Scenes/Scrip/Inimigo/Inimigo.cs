@@ -26,9 +26,11 @@ public class Inimigo : MonoBehaviour
             }
         }
     }
+
     public int _health
     {
         get {return this.currentHealth;}
         set {this.currentHealth = value;}
     }
+
 }

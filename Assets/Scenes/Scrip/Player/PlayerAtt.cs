@@ -1,3 +1,4 @@
+using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ public class PlayerAtt : MonoBehaviour
      
     public float cooldown = 2;
     public float timer;
-    
     private Inimigo inimigo;
 
     public void Update()
@@ -26,8 +26,7 @@ public class PlayerAtt : MonoBehaviour
     {
         if(timer <= 0)
         {
-            anim.SetBool("isAttacking", true);
-            
+            anim.SetBool("isAttacking", true); 
             timer = cooldown;
         }
     }
