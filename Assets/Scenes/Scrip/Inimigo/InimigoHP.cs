@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class InimigoHP : MonoBehaviour
 {
+    public int expReward = 3;
+
+    public delegate void MonsterDeafeated(int exp);
+    public static event MonsterDeafeated OnMonsterDeafeated;
     private Inimigo inimigo;
     public int maxtHelt;
     private Color corOriginal;
@@ -40,6 +44,7 @@ public class InimigoHP : MonoBehaviour
 
         if (inimigo._health <= 0)
         {
+            OnMonsterDeafeated(expReward);
             inimigo.gameObject.SetActive(false);
         }
     }
